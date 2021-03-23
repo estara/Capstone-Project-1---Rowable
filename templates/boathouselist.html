@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %} Boathouses {% endblock %}
+{% block content %}
+<h1>Boathouses</h1>
+<ul>
+    {% for boathouse in boathouses %}
+        <li><a href="/boathousedetail/{{ boathouse.id }}">{{ boathouse.name }}</a></li>
+    {% endfor %}
+</ul>
+<p>Don't see your boathouse?</p>
+<p>If your boathouse is not on the master list please <a href="mailto:safetorow@gmail.com">send us an email</a> and we will get it added!</p>
+<p>At this time we can only provide support for US boathouses.</p>
+{% endblock %}

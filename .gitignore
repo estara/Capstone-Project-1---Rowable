@@ -1,0 +1,10 @@
+ABboathouses.txt
+CDboathouses.txt
+rowableAPIkeys.txt
+secret.py
+venv/
+__pycache__/
+.idea/
+.pytest_cache/
+startbootstrap-bare-gh-pages/
+node_modules/

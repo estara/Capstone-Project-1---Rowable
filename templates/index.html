@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Rowable {% endblock %}
+{% block content %}
+<h1>Welcome to Rowable!</h1>
+<h3>The app that lets you know if it will be safe to row.</h3>
+
+<form method="POST" id="user_form">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden' %}
+          {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          {{ field(placeholder=field.label.text, class="form-control") }}
+        {% endfor %}
+
+        <button class="btn btn-primary btn-block btn-lg">Can I row?</button>
+      </form>
+
+<p>Don't see your boathouse?</p>
+<p>Check out our boathouse list for a list of US boathouses available for activation.</p>
+<p>If your boathouse is not on the master list please <a href="mailto:safetorow@gmail.com">send us an email</a> and we will get it added!</p>
+{% endblock %}

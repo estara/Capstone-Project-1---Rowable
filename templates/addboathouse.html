@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Activate {{ boathouse.name }} {% endblock %}
+{% block content %}
+<h1>Activate {{ boathouse.name }}</h1>
+<h3>Please enter maximum safe wind speeds below.</h3>
+<p>If rowing without a safety launch is not allowed please set maximum speeds to maximum safe speed with a launch.</p>
+<p>Please also indicate in the notes if your boathouse has a 4-oar rule in certain conditions/temperatures.</p>
+<p>Speeds are maximum safe speeds for rowing a 1x. Limits should be assuming rower is an elite 1x sculler.</p>
+<p>The fun limit is the maximum wind speed at which it is generally fun to row a 1x.</p>
+<p>The fun limit is to help users avoid those rows that while safe, are not particularly enjoyable.</p>
+<form method="POST" id="boathouse_form">
+        {{ form.hidden_tag() }}
+
+        {% for field in form if field.widget.input_type != 'hidden' %}
+          {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          {{ field(placeholder=field.label.text, class="form-control") }}
+        {% endfor %}
+
+        <button class="btn btn-primary btn-block btn-lg">Activate</button>
+      </form>
+{% endblock %}

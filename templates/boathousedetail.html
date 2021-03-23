@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} {{ boathouse.name }} {% endblock %}
+{% block content %}
+<h1>{{ boathouse.name }}</h1>
+<p>{{ boathouse.address}}</p>
+<p>{{ boathouse.city }}, {{ boathouse.state }} {{ boathouse.zip }}</p>
+{% if boathouse.notes is true %}
+    <p>{{ boathouse.notes }}</p>
+{% endif %}
+{% if boathouse.activated is false %}
+    <p>To get predictions for this boathouse please follow link below and enter safety limits.</p>
+    <p>Note: Must be logged in to activate a boathouse.</p>
+    <p><a href="/activateboathouse/{{ boathouse.id }}">Activate boathouse</a></p>
+{% else %}
+    <p>Max safe winds in mph:</p>
+    <p>North to south: {{ boathouse.nmax }}</p>
+    <p>South to north: {{ boathouse.smax }}</p>
+    <p>East to west: {{ boathouse.emax }}</p>
+    <p>West to east: {{ boathouse.wmax }}</p>
+    <p>Wind limits don't look right? <a href="mailto:safetorow@gmail.com">Email us.</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+CREATE TABLE "Boathouse" (
+  "ID" SERIAL PRIMARY KEY,
+  "Name" TEXT NOT NULL,
+  "Address" TEXT NOT NULL,
+  "City" TEXT NOT NULL,
+  "State" TEXT NOT NULL,
+  "Zip" INTEGER NOT NULL,
+  "Lat" INTEGER NOT NULL,
+  "Lon" INTEGER NOT NULL,
+  "Notes" TEXT,
+  "maxwind" INTEGER
+);
+
+CREATE TABLE "Maxwind" (
+  "ID" SERIAL PRIMARY KEY,
+  "NMax" INTEGER,
+  "SMax" INTEGER,
+  "EMax" INTEGER,
+  "WMax" INTEGER,
+  "FunLimit" INTEGER
+);
+
+CREATE TABLE "User" (
+  "ID" SERIAL PRIMARY KEY,
+  "username" TEXT UNIQUE NOT NULL,
+  "password" TEXT NOT NULL,
+  "email" TEXT UNIQUE NOT NULL,
+  "boathouses" INTEGER,
+  "CorF" VARCHAR(1) NOT NULL DEFAULT 'F'
+);
+
+ALTER TABLE "Boathouse" ADD FOREIGN KEY ("ID") REFERENCES "User" ("boathouses");
+
+ALTER TABLE "Boathouse" ADD FOREIGN KEY ("maxwind") REFERENCES "Maxwind" ("ID");
