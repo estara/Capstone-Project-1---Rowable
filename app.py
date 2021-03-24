@@ -12,6 +12,8 @@ CURR_USER_KEY = "curr_user"
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///rowable'))
 app.config['WTF_CSRF_ENABLED'] = False
+app.config['SECRET_KEY'] = BaseConfig.SECRET_KEY
+app.config['SECURITY_PASSWORD_SALT'] = BaseConfig.SECURITY_PASSWORD_SALT
 connect_db(app)
 db.create_all()
 
@@ -53,20 +55,19 @@ def index():
         light = weather.light_level()
 
         if wind and light and conditions == True:
-            flash('You can row!', 'success')
-            return redirect('/')
+            success = 'You can row! Have fun.'
+            return render_template('result.html', result=success, weather=weather)
         elif wind and light and conditions:
-            flash(f'{conditions}', 'success')
-            return redirect('/')
+            return render_template('result.html', result=conditions, weather=weather)
         elif not light and wind and conditions == True:
-            flash('Safe to row! It will be dark, make sure you have lights.', 'success')
-            return redirect('/')
+            dark = 'Safe to row! It will be dark, make sure you have lights.'
+            return render_template('result.html', result=dark, weather=weather)
         elif not light and wind and conditions:
-            flash(f'{conditions}. It will be dark, make sure you have lights if you choose to row.', 'success')
-            return redirect('/')
+            maybe_dark = f'{conditions}. It will be dark, make sure you have lights if you choose to row.'
+            return render_template('result.html', result=maybe_dark, weather=weather)
         else:
-            flash("You probably shouldn't row.", 'danger')
-            return redirect('/')
+            nope = "You probably shouldn't row."
+            return render_template('result.html', result=nope, weather=weather)
 
     return render_template('index.html', form=form)
 

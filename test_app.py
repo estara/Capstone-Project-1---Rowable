@@ -1,6 +1,7 @@
 import os
 from unittest import TestCase
 from models import db, connect_db, User, Boathouse
+from datetime import datetime
 
 
 os.environ['DATABASE_URL'] = 'postgresql:///rowable-test'
@@ -57,11 +58,13 @@ class AppTestCase(TestCase):
             self.assertEqual(200, resp.status_code)
             self.assertIn('<h1>Welcome to Rowable!</h1>', html)
 
-    # def test_post_index(self):
-    #     with self.client as c:
-    #         resp = c.post('/', data={'day_time': ?????, 'boathouse': 1}, follow_redirects=True)
-    #         html = resp.get_data(as_text=True)
-    #
+    def test_post_index(self):
+        """Can get if safe to row?"""
+        with self.client as c:
+            resp = c.post('/', data={'day_time': datetime.now(), 'boathouse': 1}, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            self.assertEqual(200, resp.status_code)
+            self.assertIn('<title>Rowable result', html)
 
     def test_about(self):
         """Can get about page?"""

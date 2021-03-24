@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %} Rowable result{% endblock %}
+{% block content %}
+<h3>{{ result }}</h3>
+<p>Expected wind speed: {{ weather.wind_speed }} mph</p>
+<p>Expected temperature: {{ weather.temp }}&deg</p>
+<p>Expected humidity: {{ weather.humidity }}%</p>
+<p>Expected weather conditions: {{ weather.conditions }}</p>
+<p>Sunrise: {{ weather.sunrise }}</p>
+<p>Sunset: {{ weather.sunset }}</p>
+{% endblock %}
