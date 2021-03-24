@@ -128,13 +128,16 @@ def add_user():
 @app.route('/userdetail/<int:user_id>', methods=['GET', 'POST'])
 def user_details(user_id):
     """Display/edit user details"""
-    if not g.user:
+    if not g.user or g.user.id != user_id:
         flash('Access unauthorized.', 'danger')
         return redirect("/login")
     boathouse_choices = [(b.id, b.name) for b in Boathouse.query.order_by('name')]
     form = EditUserForm()
     form.boathouses.choices = boathouse_choices
     user = User.query.get_or_404(user_id)
+    if user.confirmed is False:
+        flash('Please confirm your email account.', 'danger')
+    # need to figure out how to allow more than 1 favorited boathouse
     # user_boathouses = make_boathouse_list(user)
     if form.validate_on_submit():
         user.c_or_f = form.c_or_f.data
@@ -148,7 +151,7 @@ def user_details(user_id):
 @app.route('/userdetail/<int:user_id>/delete')
 def delete_user(user_id):
     """Delete user."""
-    if not g.user:
+    if not g.user or g.user.id != user_id:
         return redirect("/")
     user = User.query.get_or_404(user_id)
     do_logout()
@@ -174,6 +177,9 @@ def activate_boathouse(boathouse_id):
     if not g.user:
         flash('Must be logged in to activate a boathouse.', 'danger')
         return redirect('/login')
+    if g.user.confirmed is False:
+        flash('Must confirm email to activate boathouse.', 'danger')
+        return redirect('/unconfirmed')
     form = BoathouseForm()
     boathouse = Boathouse.query.get_or_404(boathouse_id)
     if form.validate_on_submit():
@@ -222,11 +228,11 @@ def confirm_email(token):
 @app.route('/unconfirmed')
 def unconfirmed():
     if g.user:
-        user = User.query.get_or_404(g.user)
-        if user.confirmed:
+        if g.user.confirmed:
             return redirect('/')
-    flash('Please confirm your account!', 'warning')
-    return render_template('unconfirmed.html')
+        flash('Please confirm your account!', 'warning')
+        return render_template('unconfirmed.html')
+    return redirect('/')
 
 
 if __name__ == '__main__':

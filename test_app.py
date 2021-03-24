@@ -47,6 +47,7 @@ class AppTestCase(TestCase):
             self.assertEqual(200, resp.status_code)
             self.assertIn('<h1>Welcome to Rowable!</h1>', html)
 
+# datetime problems. not sure how to test with datetime restrictions? Also timezones?
     def test_post_index(self):
         """Can get if safe to row?"""
         with self.client as c:
@@ -83,6 +84,7 @@ class AppTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.testuser.id
 
+# 500 internal server error. emails don't appear to work.
     def test_get_add_user(self):
         """Can get new user page?"""
         with self.client as c:
@@ -108,7 +110,7 @@ class AppTestCase(TestCase):
             resp = c.get(f'/userdetail/{self.testuser.id}')
             html = resp.get_data(as_text=True)
             self.assertEqual(200, resp.status_code)
-            self.assertIn('<h3>My favorite boathouses</h3>', html)
+            self.assertIn('<h5>My favorite boathouses</h5>', html)
             self.assertIn('<h1>testuser</h1>', html)
 
     def test_delete_user_no_login(self):
