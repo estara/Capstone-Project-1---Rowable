@@ -9,6 +9,7 @@ import requests
 
 app = Flask(__name__)
 mail = Mail(app)
+app.config['SECURITY_PASSWORD_SALT'] = BaseConfig.SECURITY_PASSWORD_SALT
 weather_url = 'http://api.openweathermap.org/data/2.5/onecall?&exclude=minutely,alerts,daily&'
 
 
@@ -23,17 +24,27 @@ def send_email(to, subject, template):
 
 
 def generate_confirmation_token(email):
+    """Generate email confirmation token"""
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt=app.config['SECURITY_PASSWORD_SALT'])
 
 
 def confirm_token(token, expiration=3600):
+    """Confirm token from confirmation email"""
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
         email = serializer.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=expiration)
     except:
         return False
     return email
+
+
+def make_boathouse_list(user):
+    """Make list of user's favorite boathouses"""
+    user_boathouse_list = []
+    for boathouse in user.boathouses:
+        user_boathouse_list.append(Boathouse.query.get_or_404(boathouse))
+    return user_boathouse_list
 
 
 class Weather:

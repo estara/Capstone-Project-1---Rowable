@@ -1,6 +1,6 @@
 import os
 from unittest import TestCase
-from models import db, connect_db, User, Boathouse
+from models import db, User, Boathouse
 from datetime import datetime
 
 
@@ -38,17 +38,6 @@ class AppTestCase(TestCase):
     def tearDown(self):
         """Teardown session"""
         db.session.rollback()
-
-    # def test_add_user_to_g(self):
-    #     assert False
-    #
-    #
-    # def test_do_login(self):
-    #     assert False
-    #
-    #
-    # def test_do_logout(self):
-    #     assert False
 
     def test_get_index(self):
         """Can get home page?"""
@@ -105,8 +94,8 @@ class AppTestCase(TestCase):
     def test_post_add_user(self):
         """Can add new user?"""
         with self.client as c:
-            resp = c.post('/newuser', data={'username': 'testuser3', 'password': 'testpass', 'email': 'test3@test.com'},
-                          follow_redirects=True)
+            resp = c.post('/newuser', data={'username': 'testuser3', 'password': 'testpass', 'confirm': 'testpass',
+                                            'email': 'test3@test.com'}, follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertIn('Please confirm your account!', html)
             self.assertIn('<p>You have not confirmed your account.', html)
@@ -125,7 +114,7 @@ class AppTestCase(TestCase):
     def test_delete_user_no_login(self):
         """Does delete user fail without login?"""
         with self.client as c:
-            resp = c.post(f'/userdetail/{self.testuser.id}/delete', follow_redirects=True)
+            resp = c.get(f'/userdetail/{self.testuser.id}/delete', follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertIn('Welcome to Rowable', html)
 
@@ -134,7 +123,7 @@ class AppTestCase(TestCase):
         with self.client as c:
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.tu2.id
-            resp = c.post(f'/userdetail/{self.tu2.id}/delete', follow_redirects=True)
+            resp = c.get(f'/userdetail/{self.tu2.id}/delete', follow_redirects=True)
             html = resp.get_data(as_text=True)
             self.assertIn('<h1>Create new user</h1>', html)
 
@@ -187,10 +176,3 @@ class AppTestCase(TestCase):
             self.assertEqual(200, resp.status_code)
             self.assertIn('<p>Max safe winds in mph:</p>', html)
             self.assertIn('<h1>testboathouse</h1>', html)
-
-    # def test_confirm_email(self):
-    #     assert False
-    #
-    #
-    # def test_unconfirmed(self):
-    #     assert False

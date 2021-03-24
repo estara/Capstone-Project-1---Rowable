@@ -4,7 +4,7 @@
 <h1>{{ boathouse.name }}</h1>
 <p>{{ boathouse.address}}</p>
 <p>{{ boathouse.city }}, {{ boathouse.state }} {{ boathouse.zip }}</p>
-{% if boathouse.notes is true %}
+{% if boathouse.notes %}
     <p>{{ boathouse.notes }}</p>
 {% endif %}
 {% if boathouse.activated is false %}

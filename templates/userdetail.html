@@ -2,9 +2,12 @@
 {% block title %} Rowable user details {% endblock %}
 {% block content %}
 <h1>{{ user.username }}</h1>
-<h3>{{ user.email }}</h3>
-<h3>My favorite boathouses</h3>
-<p>{{ user.boathouses }}</p>
+<h4>{{ user.email }}</h4>
+<h5>My favorite boathouses</h5>
+{{ user.boathouses }}
+{% for boathouse in boathouses %}
+<a href="/boathousedetail/{{ boathouse.id }}">{{ boathouse.name }}</a>
+{% endfor %}
 <form method="POST" id="edit_user_form">
         {{ form.hidden_tag() }}
 
@@ -17,4 +20,5 @@
 
         <button class="btn btn-primary btn-block btn-lg">Submit</button>
       </form>
+<a href="/userdetail/{{ user.id }}/delete">Delete user</a>
 {% endblock %}

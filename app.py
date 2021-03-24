@@ -4,7 +4,7 @@ from flask import Flask, render_template, session, flash, redirect, url_for, g
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Boathouse, User
 from forms import UserForm, BoathouseForm, LoginForm, EditUserForm, RowableForm
-from helpers import Weather, send_email, generate_confirmation_token, confirm_token
+from helpers import Weather, send_email, generate_confirmation_token, confirm_token, make_boathouse_list
 from secret import BaseConfig
 
 
@@ -13,7 +13,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///rowable'))
 app.config['WTF_CSRF_ENABLED'] = False
 app.config['SECRET_KEY'] = BaseConfig.SECRET_KEY
-app.config['SECURITY_PASSWORD_SALT'] = BaseConfig.SECURITY_PASSWORD_SALT
 connect_db(app)
 db.create_all()
 
@@ -136,6 +135,7 @@ def user_details(user_id):
     form = EditUserForm()
     form.boathouses.choices = boathouse_choices
     user = User.query.get_or_404(user_id)
+    # user_boathouses = make_boathouse_list(user)
     if form.validate_on_submit():
         user.c_or_f = form.c_or_f.data
         user.boathouses = form.boathouses.data
@@ -145,13 +145,14 @@ def user_details(user_id):
     return render_template('userdetail.html', form=form, user=user)
 
 
-@app.route('/userdetail/<int:user_id>/delete', methods=['POST'])
+@app.route('/userdetail/<int:user_id>/delete')
 def delete_user(user_id):
     """Delete user."""
     if not g.user:
         return redirect("/")
+    user = User.query.get_or_404(user_id)
     do_logout()
-    db.session.delete(user_id)
+    db.session.delete(user)
     db.session.commit()
     return redirect('/newuser')
 
