@@ -13,7 +13,7 @@ class UserForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(min=2)])
     email = StringField('Email', validators=[InputRequired(), Email(), Length(min=6)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=6)])
-    confirm = PasswordField('Repeat password', validators=[InputRequired(), EqualTo('password',
+    confirm = PasswordField('Confirm password', validators=[InputRequired(), EqualTo('password',
                                                                                     message='Passwords must match.')])
 
     def validate(self):

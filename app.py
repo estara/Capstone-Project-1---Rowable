@@ -4,7 +4,7 @@ from flask import Flask, render_template, session, flash, redirect, url_for, g
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Boathouse, User
 from forms import UserForm, BoathouseForm, LoginForm, EditUserForm, RowableForm
-from helpers import Weather, send_email, generate_confirmation_token, confirm_token, make_boathouse_list
+from helpers import Weather, send_email, generate_confirmation_token, confirm_token
 from secret import BaseConfig
 
 
@@ -52,6 +52,7 @@ def index():
         conditions = weather.is_it_safe_conditions()
         wind = weather.is_it_safe_wind()
         light = weather.light_level()
+        weather.c_or_f()
 
         if wind and light and conditions == True:
             success = 'You can row! Have fun.'
@@ -116,7 +117,7 @@ def add_user():
             return render_template('/newuser', form=form)
         db.session.commit()
         token = generate_confirmation_token(user.email)
-        confirm_url = url_for('user.confirm_email', token=token, _external=True)
+        confirm_url = url_for('confirm_email', token=token, _external=True)
         html = render_template('activate.html', confirm_url=confirm_url)
         subject = 'Please confirm your email'
         send_email(user.email, subject, html)

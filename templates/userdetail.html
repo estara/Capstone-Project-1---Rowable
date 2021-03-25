@@ -3,11 +3,15 @@
 {% block content %}
 <h1>{{ user.username }}</h1>
 <h4>{{ user.email }}</h4>
+{% if user.boathouses %}
 <h5>My favorite boathouses</h5>
-{{ user.boathouses }}
+<li>{{ user.boathouses }}</li>
+{% endif %}
 {% for boathouse in boathouses %}
 <a href="/boathousedetail/{{ boathouse.id }}">{{ boathouse.name }}</a>
 {% endfor %}
+<br>
+Choose your preferred temperature units and add a favorite boathouse:
 <form method="POST" id="edit_user_form">
         {{ form.hidden_tag() }}
 
@@ -18,7 +22,8 @@
           {{ field(placeholder=field.label.text, class="form-control") }}
         {% endfor %}
 
-        <button class="btn btn-primary btn-block btn-lg">Submit</button>
+        <button class="btn btn-primary btn-block btn-md">Submit</button>
       </form>
+<br><br>
 <a href="/userdetail/{{ user.id }}/delete">Delete user</a>
 {% endblock %}

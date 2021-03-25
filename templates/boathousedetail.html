@@ -2,14 +2,16 @@
 {% block title %} {{ boathouse.name }} {% endblock %}
 {% block content %}
 <h1>{{ boathouse.name }}</h1>
-<p>{{ boathouse.address}}</p>
-<p>{{ boathouse.city }}, {{ boathouse.state }} {{ boathouse.zip }}</p>
+<br>
+<p>{{ boathouse.address}}<br>
+{{ boathouse.city }}, {{ boathouse.state }} {{ boathouse.zip }}</p>
 {% if boathouse.notes %}
     <p>{{ boathouse.notes }}</p>
 {% endif %}
+<br>
 {% if boathouse.activated is false %}
-    <p>To get predictions for this boathouse please follow link below and enter safety limits.</p>
-    <p>Note: Must be logged in to activate a boathouse.</p>
+    <p>To get predictions for this boathouse please follow the link below and enter the safety limits.<br>
+    Note: Must be logged in to activate a boathouse.</p>
     <p><a href="/activateboathouse/{{ boathouse.id }}">Activate boathouse</a></p>
 {% else %}
     <p>Max safe winds in mph:</p>

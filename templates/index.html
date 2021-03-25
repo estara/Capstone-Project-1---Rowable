@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Welcome to Rowable!</h1>
 <h3>The app that lets you know if it will be safe to row.</h3>
-
+<br>
 <form method="POST" id="user_form">
         <p>Where and when would you like to row?</p>
         {{ form.hidden_tag() }}
@@ -14,12 +14,12 @@
           {% endfor %}
           {{ field(placeholder=field.label.text, class="form-control") }}
         {% endfor %}
-        <p>Time must be on the hour, e.g. 6:00 AM, or 3:00 PM. Mid hours (3:15 PM, 5:30 AM) will not work.<br>
+        <p>Time must be on the hour, e.g. 6:00 AM. Mid hours, e.g. 3:15 PM, will not work.<br>
         Unfortunately at this time we can only provide predictions for up to 2 days in advance.</p>
-        <button class="btn btn-primary btn-block btn-lg">Can I row?</button>
+        <button class="btn btn-primary btn-block btn-md">Can I row?</button>
       </form>
-
+<br><br>
 <p>Don't see your boathouse?<br>
-Check out our boathouse list for a list of US boathouses available for activation.<br>
+    Check out our <a href="/boathouselist">boathouse list</a> for a list of US boathouses available for activation.<br>
 If your boathouse is not on the master list please <a href="mailto:safetorow@gmail.com">send us an email</a> and we will get it added!</p>
 {% endblock %}

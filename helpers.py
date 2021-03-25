@@ -9,6 +9,8 @@ import requests
 
 app = Flask(__name__)
 mail = Mail(app)
+app.config['SECRET_KEY'] = BaseConfig.SECRET_KEY
+app.config['MAIL_DEFAULT_SENDER'] = BaseConfig.MAIL_DEFAULT_SENDER
 app.config['SECURITY_PASSWORD_SALT'] = BaseConfig.SECURITY_PASSWORD_SALT
 weather_url = 'http://api.openweathermap.org/data/2.5/onecall?&exclude=minutely,alerts,daily&'
 
@@ -75,7 +77,6 @@ class Weather:
 
     def wind_dir(self):
         """Translate wind direction in degrees"""
-        print(self.wind_direction)
         nwind, ewind, swind, wwind = None, None, None, None
         if self.wind_direction > 326 or self.wind_direction < 56:
             nwind = self.wind_speed
@@ -89,7 +90,6 @@ class Weather:
 
     def is_it_safe_conditions(self):
         """Will weather type be safe?"""
-        print(self.conditions)
         if self.conditions == 'Thunderstorm':
             return 'Unlikely, thunderstorms forecasted.'
         if self.conditions == 'Snow':
@@ -113,21 +113,31 @@ class Weather:
     def is_it_safe_wind(self):
         """Determine whether wind speeds/directions are within safety limits"""
         nwind, ewind, swind, wwind = self.wind_dir()
-        print(nwind, ewind, swind, wwind)
         rowable = None
-        if nwind is not None and self.boathouse.nmax <= nwind:
+        if nwind is None or self.boathouse.nmax is None:
+            pass
+        elif nwind is not None and self.boathouse.nmax <= nwind:
             rowable = False
         elif nwind is not None:
             rowable = True
-        if swind is not None and self.boathouse.smax <= swind:
+
+        if swind is None or self.boathouse.smax is None:
+            pass
+        elif swind is not None and self.boathouse.smax <= swind:
             rowable = False
         elif swind is not None and rowable is None or rowable:
             rowable = True
-        if ewind and self.boathouse.emax <= ewind:
+
+        if ewind is None or self.boathouse.emax is None:
+            pass
+        elif ewind and self.boathouse.emax <= ewind:
             rowable = False
         elif ewind is not None and rowable is None or rowable:
             rowable = True
-        if wwind and self.boathouse.wmax <= wwind:
+
+        if wwind is None or self.boathouse.wmax is None:
+            pass
+        elif wwind and self.boathouse.wmax <= wwind:
             rowable = False
         elif wwind is not None and rowable is None or rowable:
             rowable = True
@@ -145,3 +155,7 @@ class Weather:
             if str(self.day_time) == str(datetime.fromtimestamp(int(entry['dt']))):
                 return idx
             idx += 1
+
+    def c_or_f(self):
+        if self.user.c_or_f == 'metric':
+            self.temp = round(((self.temp - 32) * 5/9), 2)
