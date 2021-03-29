@@ -4,6 +4,7 @@ from itsdangerous import URLSafeTimedSerializer
 from secret import BaseConfig
 from models import Boathouse, User
 from datetime import datetime
+from pytz import timezone
 import requests
 
 
@@ -56,6 +57,7 @@ class Weather:
         self.boathouse = Boathouse.query.get_or_404(boathouse_id)
         self.day_time = day_time
         self.get_weather()
+        self.sunrise_sunset_conversion()
 
     def get_weather(self):
         """Get weather data from API"""
@@ -69,8 +71,8 @@ class Weather:
         self.temp = response_decoded['hourly'][idx]['temp']
         self.feels_like = response_decoded['hourly'][idx]['feels_like']
         self.humidity = response_decoded['hourly'][idx]['humidity']
-        self.sunrise = datetime.utcfromtimestamp(int(response_decoded['current']['sunrise']))
-        self.sunset = datetime.utcfromtimestamp(int(response_decoded['current']['sunset']))
+        self.sunrise = datetime.fromtimestamp(int(response_decoded['current']['sunrise']), timezone('UTC'))
+        self.sunset = datetime.fromtimestamp(int(response_decoded['current']['sunset']), timezone('UTC'))
         self.wind_speed = response_decoded['hourly'][idx]['wind_speed']
         self.wind_direction = response_decoded['hourly'][idx]['wind_deg']
         self.conditions = response_decoded['hourly'][idx]['weather'][0]['main']
@@ -144,18 +146,25 @@ class Weather:
         return rowable
 
     def light_level(self):
-        if self.day_time < self.sunrise or self.day_time < self.sunset:
+        if self.day_time < self.sunrise or self.day_time > self.sunset:
             return False
         else:
             return True
 
     def get_hourly_record(self, response):
         idx = 0
+        boathouse_tz = timezone(self.boathouse.timezone)
+        self.day_time = boathouse_tz.localize(self.day_time)
         for entry in response['hourly']:
-            if str(self.day_time) == str(datetime.fromtimestamp(int(entry['dt']))):
+            if self.day_time.astimezone(timezone('UTC')) == datetime.fromtimestamp(int(entry['dt']), timezone('UTC')):
                 return idx
             idx += 1
 
     def c_or_f(self):
         if self.user.c_or_f == 'metric':
             self.temp = round(((self.temp - 32) * 5/9), 2)
+
+    def sunrise_sunset_conversion(self):
+        boathouse_tz = timezone(self.boathouse.timezone)
+        self.sunrise = self.sunrise.astimezone(boathouse_tz)
+        self.sunset = self.sunset.astimezone(boathouse_tz)

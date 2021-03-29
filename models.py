@@ -27,6 +27,7 @@ class Boathouse(db.Model):
     emax = db.Column(db.Integer, nullable=True)
     wmax = db.Column(db.Integer, nullable=True)
     fun_limit = db.Column(db.Integer, nullable=True)
+    timezone = db.Column(db.Text, nullable=True)
     users = db.relationship('User')
 
 

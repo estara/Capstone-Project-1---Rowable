@@ -6,6 +6,7 @@ from wtforms.validators import InputRequired, Email, Optional, NumberRange, Leng
 from flask_wtf import FlaskForm
 from models import User
 from datetime import datetime, timedelta
+from pytz import timezone
 
 
 class UserForm(FlaskForm):
@@ -34,6 +35,7 @@ class BoathouseForm(FlaskForm):
     emax = IntegerField('Max safe east to west wind', validators=[Optional(), NumberRange(min=2)])
     wmax = IntegerField('Max safe west to east wind', validators=[Optional(), NumberRange(min=2)])
     fun_limit = IntegerField('Max wind for rowing to be fun', validators=[Optional()])
+    timezone = SelectField('Boathouse time zone', coerce=int, validators=[InputRequired()])
     notes = StringField('Notes about rowing here', validators=[Optional()])
 
 

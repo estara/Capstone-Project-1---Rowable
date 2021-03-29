@@ -1,5 +1,6 @@
 import os
 import datetime
+import pytz
 from flask import Flask, render_template, session, flash, redirect, url_for, g
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Boathouse, User
@@ -181,7 +182,9 @@ def activate_boathouse(boathouse_id):
     if g.user.confirmed is False:
         flash('Must confirm email to activate boathouse.', 'danger')
         return redirect('/unconfirmed')
+    timezone_choices = [(t.id, t.name) for t in pytz.country_names['US'].items()]
     form = BoathouseForm()
+    form.timezone.choices = timezone_choices
     boathouse = Boathouse.query.get_or_404(boathouse_id)
     if form.validate_on_submit():
         boathouse.nmax = form.nmax.data
