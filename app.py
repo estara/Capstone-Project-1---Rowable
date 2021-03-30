@@ -11,7 +11,7 @@ from secret import BaseConfig
 
 CURR_USER_KEY = "curr_user"
 app = Flask(__name__)
-SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 app.config['WTF_CSRF_ENABLED'] = False
 app.config['SECRET_KEY'] = BaseConfig.SECRET_KEY
 connect_db(app)
