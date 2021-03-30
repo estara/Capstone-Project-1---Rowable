@@ -6,6 +6,5 @@ venv/
 __pycache__/
 .idea/
 .pytest_cache/
-startbootstrap-bare-gh-pages/
 node_modules/
 run_rowable
