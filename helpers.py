@@ -16,6 +16,13 @@ app.config['SECURITY_PASSWORD_SALT'] = BaseConfig.SECURITY_PASSWORD_SALT
 weather_url = 'http://api.openweathermap.org/data/2.5/onecall?&exclude=minutely,alerts,daily&'
 
 
+def add_to_list(old_list, new_item):
+    mytrans = {91: 123, 93: 125}
+    old_list.append(new_item)
+    boathouse_str = str(old_list)
+    return boathouse_str.translate(mytrans)
+
+
 def send_email(to, subject, template):
     msg = Message(
         subject,

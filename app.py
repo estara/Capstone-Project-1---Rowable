@@ -5,7 +5,7 @@ from flask import Flask, render_template, session, flash, redirect, url_for, g
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Boathouse, User
 from forms import UserForm, BoathouseForm, LoginForm, EditUserForm, RowableForm
-from helpers import Weather, send_email, generate_confirmation_token, confirm_token
+from helpers import Weather, send_email, generate_confirmation_token, confirm_token, add_to_list
 from secret import BaseConfig
 
 
@@ -139,15 +139,14 @@ def user_details(user_id):
     user = User.query.get_or_404(user_id)
     if user.confirmed is False:
         flash('Please confirm your email account.', 'danger')
-    # need to figure out how to allow more than 1 favorited boathouse
-    # user_boathouses = make_boathouse_list(user)
     if form.validate_on_submit():
         user.c_or_f = form.c_or_f.data
-        user.boathouses = form.boathouses.data
+        user.boathouses = add_to_list(user.boathouses, form.boathouses.data)
         db.session.add(user)
         db.session.commit()
         return redirect(f'/userdetail/{user_id}')
-    return render_template('userdetail.html', form=form, user=user)
+    boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
+    return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
 
 @app.route('/userdetail/<int:user_id>/delete')

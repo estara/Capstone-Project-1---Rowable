@@ -5,11 +5,12 @@
 <h4>{{ user.email }}</h4>
 {% if user.boathouses %}
 <h5>My favorite boathouses</h5>
-<li>{{ user.boathouses }}</li>
-{% endif %}
+<ul>
 {% for boathouse in boathouses %}
-<a href="/boathousedetail/{{ boathouse.id }}">{{ boathouse.name }}</a>
+    <li><a href="/boathousedetail/{{ boathouse.id }}">{{ boathouse.name }}</a><br></li>
 {% endfor %}
+</ul>
+{% endif %}
 <br>
 Choose your preferred temperature units and add a favorite boathouse:
 <form method="POST" id="edit_user_form">
