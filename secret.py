@@ -1,8 +1,11 @@
+import os
+
+
 class BaseConfig(object):
     """Base configuration."""
 
     # main config
-    SECRET_KEY = 'IsItRowable'
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'blah')
     SECURITY_PASSWORD_SALT = 'IWantToRowToday'
     DEBUG = False
     BCRYPT_LOG_ROUNDS = 7
