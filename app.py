@@ -181,7 +181,7 @@ def activate_boathouse(boathouse_id):
     if g.user.confirmed is False:
         flash('Must confirm email to activate boathouse.', 'danger')
         return redirect('/unconfirmed')
-    timezone_choices = [(t.id, t.name) for t in pytz.country_names['US'].items()]
+    timezone_choices = [t for t in pytz.country_timezones['US']]
     form = BoathouseForm()
     form.timezone.choices = timezone_choices
     boathouse = Boathouse.query.get_or_404(boathouse_id)
