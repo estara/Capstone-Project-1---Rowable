@@ -43,7 +43,7 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
-    boathouses = db.Column(db.Integer, db.ForeignKey('boathouse.id'), default='{}')
+    boathouses = db.Column(db.Integer, db.ForeignKey('boathouse.id'))
 
     @classmethod
     def signup(cls, username, email, password):
