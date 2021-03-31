@@ -5,14 +5,14 @@ class BaseConfig(object):
     """Base configuration."""
 
     # main config
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'blah')
-    SECURITY_PASSWORD_SALT = 'IWantToRowToday'
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'adljk;adlfgjk')
+    SECURITY_PASSWORD_SALT = os.environ.get('SECURITY_PASSWORD_SALT', 'adlkjasdf246')
     DEBUG = False
     BCRYPT_LOG_ROUNDS = 7
     WTF_CSRF_ENABLED = True
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
-    weather_key = '279fd9dca315057953de0350c4863100'
+    weather_key = os.environ.get('weather_key')
 
     # mail settings
     MAIL_SERVER = 'smtp.gmail.com'
@@ -21,8 +21,8 @@ class BaseConfig(object):
     MAIL_USE_SSL = False
 
     # gmail authentication
-    MAIL_USERNAME = 'safetorow@gmail.com'
-    MAIL_PASSWORD = 'Rowable2@'
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
     # mail accounts
-    MAIL_DEFAULT_SENDER = 'safetorow@gmail.com'
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
