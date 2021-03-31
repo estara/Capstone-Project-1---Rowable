@@ -54,8 +54,8 @@ class EditUserForm(FlaskForm):
 class RowableForm(FlaskForm):
     """Form for selecting day and time to get info for"""
     boathouse = SelectField(u'Boathouse you want to row from', coerce=int)
-    day_time = DateTimeLocalField('Day and time you would like to row', format='%Y-%m-%dT%H:00', default=datetime.utcnow(),
-                                  validators=[InputRequired(), DateRange(min=datetime.utcnow(),
-                                                                         max=datetime.utcnow() + timedelta(hours=48))])
+    day_time = DateTimeLocalField('Day and time you would like to row', format='%Y-%m-%dT%H:00', default=datetime.now(),
+                                  validators=[InputRequired(), DateRange(min=datetime.now(),
+                                                                         max=datetime.now() + timedelta(hours=48))])
 
 
