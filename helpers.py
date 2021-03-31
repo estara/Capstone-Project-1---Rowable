@@ -24,6 +24,8 @@ mail = Mail(app)
 
 
 def add_to_list(old_list, new_item):
+    if old_list is None:
+        return '{' + str(new_item) + '}'
     mytrans = {91: 123, 93: 125}
     old_list.append(new_item)
     boathouse_str = str(old_list)
