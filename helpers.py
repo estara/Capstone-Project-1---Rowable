@@ -9,11 +9,17 @@ import requests
 
 
 app = Flask(__name__)
-mail = Mail(app)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
 app.config['SECRET_KEY'] = BaseConfig.SECRET_KEY
-app.config['MAIL_DEFAULT_SENDER'] = BaseConfig.MAIL_DEFAULT_SENDER
 app.config['SECURITY_PASSWORD_SALT'] = BaseConfig.SECURITY_PASSWORD_SALT
 weather_url = 'http://api.openweathermap.org/data/2.5/onecall?&exclude=minutely,alerts,daily&'
+mail = Mail(app)
 
 
 def add_to_list(old_list, new_item):
