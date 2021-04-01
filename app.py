@@ -148,7 +148,8 @@ def user_details(user_id):
         return redirect(f'/userdetail/{user_id}')
     if user.boathouses is not None:
         print('get boathouses ****************************')
-        boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
+        print(user.boathouses)
+        boathouses = [b for b in Boathouse.query.filter(boathouse.id.in_(user.boathouses))]
         print('got boathouses ******************************')
     else:
         print('no boathouses *********************')
