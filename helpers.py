@@ -3,7 +3,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from secret import BaseConfig
 from models import Boathouse, User
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
 import os
 import requests
@@ -162,27 +162,42 @@ class Weather:
         return rowable
 
     def light_level(self):
-        if self.day_time < self.sunrise or self.day_time > self.sunset:
+        """Will it be light?"""
+        # check day 1
+        if self.day_time < self.sunrise:
             return False
-        else:
+        elif self.day_time > self.sunrise and self.day_time < self.sunset:
             return True
+        # check day 2
+        if self.day_time > self.sunset and self.day_time < self.sunrise + timedelta(days=1):
+            return False
+        elif self.day_time > self.sunrise + timedelta(days=1) and self.day_time < self.sunset + timedelta(days=1):
+            return True
+        # check day 3
+        if self.day_time > self.sunset + timedelta(days=1) and self.day_time < self.sunrise + timedelta(days=2):
+            return False
+        elif self.day_time > self.sunrise + timedelta(days=2) and self.day_time < self.sunset + timedelta(days=2):
+            return True
+        else:
+            return False
 
     def get_hourly_record(self, response):
+        """Get the right hourly record from API response"""
         idx = 0
         boathouse_tz = timezone(self.boathouse.timezone)
         self.day_time = boathouse_tz.localize(self.day_time)
-        print(self.day_time)
-        print('***********************************')
         for entry in response['hourly']:
             if self.day_time.astimezone(timezone('UTC')) == datetime.fromtimestamp(int(entry['dt']), timezone('UTC')):
                 return idx
             idx += 1
 
     def c_or_f(self):
+        """Display the user's preferred temperature units"""
         if self.user.c_or_f == 'metric':
             self.temp = round(((self.temp - 32) * 5/9), 2)
 
     def sunrise_sunset_conversion(self):
+        """Convert sunrise/sunset to boathouse timezone"""
         boathouse_tz = timezone(self.boathouse.timezone)
         self.sunrise = self.sunrise.astimezone(boathouse_tz)
         self.sunset = self.sunset.astimezone(boathouse_tz)
