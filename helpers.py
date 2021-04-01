@@ -78,11 +78,13 @@ class Weather:
     def get_weather(self):
         """Get weather data from API"""
         try:
+            print('pre-response ************************************')
             response = requests.get(f'{weather_url}lat={self.boathouse.lat}&lon={self.boathouse.lon}&units=imperial&appid={BaseConfig.weather_key}')
         except:
+            print("won't connect ***********************************************")
             return ConnectionError
         response_decoded = response.json()
-        print(response_decoded)
+        print('got api response ******************************************')
         idx = self.get_hourly_record(response_decoded)
         self.time = response_decoded['hourly'][idx]['dt']
         self.temp = response_decoded['hourly'][idx]['temp']
@@ -169,11 +171,13 @@ class Weather:
             return True
 
     def get_hourly_record(self, response):
+        print('try to get timerecord **************************************')
         idx = 0
         boathouse_tz = timezone(self.boathouse.timezone)
         self.day_time = boathouse_tz.localize(self.day_time)
         for entry in response['hourly']:
             if self.day_time.astimezone(timezone('UTC')) == datetime.fromtimestamp(int(entry['dt']), timezone('UTC')):
+                print('got timerecord **********************************')
                 return idx
             idx += 1
 
@@ -185,3 +189,4 @@ class Weather:
         boathouse_tz = timezone(self.boathouse.timezone)
         self.sunrise = self.sunrise.astimezone(boathouse_tz)
         self.sunset = self.sunset.astimezone(boathouse_tz)
+        print('sunrisesunset conversion ***********************************')
