@@ -171,6 +171,7 @@ class Weather:
         idx = 0
         boathouse_tz = timezone(self.boathouse.timezone)
         self.day_time = boathouse_tz.localize(self.day_time)
+        print(self.day_time + '***********************************')
         for entry in response['hourly']:
             if self.day_time.astimezone(timezone('UTC')) == datetime.fromtimestamp(int(entry['dt']), timezone('UTC')):
                 return idx
