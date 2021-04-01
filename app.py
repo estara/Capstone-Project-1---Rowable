@@ -45,22 +45,15 @@ def index():
     form = RowableForm()
     form.boathouse.choices = boathouse_choices
     if form.validate_on_submit():
-        print('did validate form? **************************************')
         if not g.user:
-            print('not logged in ***************************************')
             weather = Weather(form.day_time.data, form.boathouse.data)
         else:
-            print('logged in *********************************************')
             weather = Weather(form.day_time.data, form.boathouse.data, session[CURR_USER_KEY])
-        print('did get weather? ***********************************')
+
         conditions = weather.is_it_safe_conditions()
-        print('did get conditions? *******************************')
         wind = weather.is_it_safe_wind()
-        print('did get wind? ************************************')
         light = weather.light_level()
-        print('did get light? *********************************')
         weather.c_or_f()
-        print('did get unit conversion? ******************************************')
 
         if wind and light and conditions == True:
             success = 'You can row! Have fun.'
