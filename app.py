@@ -136,9 +136,7 @@ def user_details(user_id):
     user = User.query.get_or_404(user_id)
     print(user.boathouses)
     form = EditUserForm()
-    curr_favorites = [boathouse.id for boathouse in user.boathouses]
-    form.boathouses.choices = (db.session.query(Boathouse.id, Boathouse.name)
-                               .filter(Boathouse.id.notin_(curr_favorites)).all())
+    form.boathouses.choices = [(b.id, b.name) for b in Boathouse.query.all()]
     if user.confirmed is False:
         flash('Please confirm your email account.', 'danger')
     if form.validate_on_submit():
