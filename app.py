@@ -146,7 +146,8 @@ def user_details(user_id):
         db.session.commit()
         return redirect(f'/userdetail/{user_id}')
     if user.boathouses:
-        boathouses = UserFavorites.query.filter_by(user_id=user_id).all()
+        boathouse_list = UserFavorites.query.filter_by(user_id=user_id).all()
+        boathouses = [Boathouse.query.get_or_404(boathouse.id) for boathouse in boathouse_list]
     else:
         boathouses = None
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
