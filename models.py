@@ -28,7 +28,6 @@ class Boathouse(db.Model):
     wmax = db.Column(db.Integer, nullable=True)
     fun_limit = db.Column(db.Integer, nullable=True)
     timezone = db.Column(db.Text, nullable=True)
-    users = db.relationship('UserFavorites', backref='boathouse')
 
 
 class User(db.Model):
@@ -43,7 +42,7 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
-    boathouses = db.relationship('UserFavorites', backref='user')
+    boathouses = db.relationship('Boathouse', secondary='user_favorites', backref='user', cascade="all, delete-orphan")
 
     @classmethod
     def signup(cls, username, email, password):

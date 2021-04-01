@@ -23,16 +23,6 @@ weather_url = 'http://api.openweathermap.org/data/2.5/onecall?&exclude=minutely,
 mail = Mail(app)
 
 
-def add_to_list(old_list, new_item):
-    """add favorite boathouse"""
-    if old_list is None:
-        return new_item
-    mytrans = {91: 123, 93: 125}
-    old_list.append(new_item)
-    boathouse_str = str(old_list)
-    return boathouse_str.translate(mytrans)
-
-
 def send_email(to, subject, template):
     """send account confirmation email"""
     msg = Message(

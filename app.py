@@ -133,29 +133,21 @@ def user_details(user_id):
     if not g.user or g.user.id != user_id:
         flash('Access unauthorized.', 'danger')
         return redirect("/login")
-    boathouse_choices = [(b.id, b.name) for b in Boathouse.query.order_by('name')]
-    form = EditUserForm()
-    form.boathouses.choices = boathouse_choices
     user = User.query.get_or_404(user_id)
+    form = EditUserForm()
+    curr_favorites = [boathouse.id for boathouse in user.boathouses]
+    form.boathouses.choices = (db.session.query(Boathouse.id, Boathouse.name)
+                               .filter(Boathouse.id.notin_(curr_favorites)).all())
     if user.confirmed is False:
         flash('Please confirm your email account.', 'danger')
     if form.validate_on_submit():
+        favorite_boathouse = UserFavorites(user_id=user.id, boathouse_id=form.boathouses.data)
         user.c_or_f = form.c_or_f.data
-        user.boathouses = add_to_list(user.boathouses, form.boathouses.data)
+        db.session.add(favorite_boathouse)
         db.session.add(user)
         db.session.commit()
-        print('updated boathouses ****************************')
         return redirect(f'/userdetail/{user_id}')
-    if user.boathouses is None:
-        boathouses = None
-    elif len(user.boathouses) == 1:
-        print('get boathouses ****************************')
-        print(user.boathouses)
-        boathouses = Boathouse.query.filter(user.boathouses).all()
-        print('got boathouses ******************************')
-    else:
-        print('many boathouses *************************')
-        boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
+    boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
 
