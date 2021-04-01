@@ -134,6 +134,7 @@ def user_details(user_id):
         flash('Access unauthorized.', 'danger')
         return redirect("/login")
     user = User.query.get_or_404(user_id)
+    print(user.boathouses)
     form = EditUserForm()
     curr_favorites = [boathouse.id for boathouse in user.boathouses]
     form.boathouses.choices = (db.session.query(Boathouse.id, Boathouse.name)
@@ -147,9 +148,8 @@ def user_details(user_id):
         db.session.add(user)
         db.session.commit()
         return redirect(f'/userdetail/{user_id}')
-    boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
-    if boathouses == []:
-        boathouses = None
+    if user.boathouses:
+        boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
 
