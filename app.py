@@ -5,7 +5,7 @@ from flask import Flask, render_template, session, flash, redirect, url_for, g
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Boathouse, User, UserFavorites
 from forms import UserForm, BoathouseForm, LoginForm, EditUserForm, RowableForm
-from helpers import Weather, send_email, generate_confirmation_token, confirm_token, add_to_list
+from helpers import Weather, send_email, generate_confirmation_token, confirm_token
 from secret import BaseConfig
 
 
