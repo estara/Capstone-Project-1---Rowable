@@ -41,13 +41,9 @@ def do_logout():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """Display home page/process rowable form"""
-    print('get boathouse choices ****************')
     boathouse_choices = [(b.id, b.name) for b in Boathouse.query.filter_by(activated=True).order_by('name').all()]
-    print('get rowable form ********************')
     form = RowableForm()
-    print('populate form ****************')
     form.boathouse.choices = boathouse_choices
-    print('validate form or return *****************')
     if form.validate_on_submit():
         if not g.user:
             weather = Weather(form.day_time.data, form.boathouse.data)
@@ -138,10 +134,14 @@ def user_details(user_id):
         flash('Access unauthorized.', 'danger')
         return redirect("/login")
     user = User.query.get_or_404(user_id)
+    print('got user **************************')
     form = EditUserForm()
+    print('got edit form **********************')
     curr_favorites = [boathouse.id for boathouse in user.boathouses]
+    print('got favorites ************************')
     form.boathouses.choices = (db.session.query(Boathouse.id, Boathouse.name)
                                .filter(Boathouse.id.notin_(curr_favorites)).all())
+    print('set favorites ***********************')
     if user.confirmed is False:
         flash('Please confirm your email account.', 'danger')
     if form.validate_on_submit():
@@ -152,6 +152,7 @@ def user_details(user_id):
         db.session.commit()
         return redirect(f'/userdetail/{user_id}')
     boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
+    print('got favorite boathouses ******************************')
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
 
