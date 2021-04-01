@@ -69,9 +69,13 @@ def make_boathouse_list(user):
 class Weather:
     """Weather data and functions for when user wants to row"""
     def __init__(self, day_time, boathouse_id, user_id=1):
+        print('start weather init ******************************')
         self.user = User.query.get_or_404(user_id)
+        print('got user *************************************')
         self.boathouse = Boathouse.query.get_or_404(boathouse_id)
+        print('got boathouse ****************************************')
         self.day_time = day_time
+        print('set time *****************************')
         self.get_weather()
         self.sunrise_sunset_conversion()
 
