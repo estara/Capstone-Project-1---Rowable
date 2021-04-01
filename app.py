@@ -146,14 +146,16 @@ def user_details(user_id):
         db.session.commit()
         print('updated boathouses ****************************')
         return redirect(f'/userdetail/{user_id}')
-    if user.boathouses is not None:
+    if user.boathouses is None:
+        boathouses = None
+    elif len(user.boathouses) == 1:
         print('get boathouses ****************************')
         print(user.boathouses)
-        boathouses = [b for b in Boathouse.query.filter(boathouse.id.in_(user.boathouses))]
+        boathouses = Boathouse.query.filter(user.boathouses).all()
         print('got boathouses ******************************')
     else:
-        print('no boathouses *********************')
-        boathouses = None
+        print('many boathouses *************************')
+        boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
 
