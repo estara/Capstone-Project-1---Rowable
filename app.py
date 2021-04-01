@@ -41,9 +41,13 @@ def do_logout():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """Display home page/process rowable form"""
+    print('get boathouse choices ****************')
     boathouse_choices = [(b.id, b.name) for b in Boathouse.query.filter_by(activated=True).order_by('name').all()]
+    print('get rowable form ********************')
     form = RowableForm()
+    print('populate form ****************')
     form.boathouse.choices = boathouse_choices
+    print('validate form or return *****************')
     if form.validate_on_submit():
         if not g.user:
             weather = Weather(form.day_time.data, form.boathouse.data)
