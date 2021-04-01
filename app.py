@@ -134,14 +134,10 @@ def user_details(user_id):
         flash('Access unauthorized.', 'danger')
         return redirect("/login")
     user = User.query.get_or_404(user_id)
-    print('got user **************************')
     form = EditUserForm()
-    print('got edit form **********************')
     curr_favorites = [boathouse.id for boathouse in user.boathouses]
-    print('got favorites ************************')
     form.boathouses.choices = (db.session.query(Boathouse.id, Boathouse.name)
                                .filter(Boathouse.id.notin_(curr_favorites)).all())
-    print('set favorites ***********************')
     if user.confirmed is False:
         flash('Please confirm your email account.', 'danger')
     if form.validate_on_submit():
