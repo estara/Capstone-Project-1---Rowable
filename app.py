@@ -41,7 +41,6 @@ def do_logout():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """Display home page/process rowable form"""
-    print(BaseConfig.weather_key)
     boathouse_choices = [(b.id, b.name) for b in Boathouse.query.filter_by(activated=True).order_by('name').all()]
     form = RowableForm()
     form.boathouse.choices = boathouse_choices

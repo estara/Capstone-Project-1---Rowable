@@ -82,6 +82,7 @@ class Weather:
         except:
             return ConnectionError
         response_decoded = response.json()
+        print(response_decoded)
         idx = self.get_hourly_record(response_decoded)
         self.time = response_decoded['hourly'][idx]['dt']
         self.temp = response_decoded['hourly'][idx]['temp']
