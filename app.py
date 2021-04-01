@@ -134,7 +134,6 @@ def user_details(user_id):
         flash('Access unauthorized.', 'danger')
         return redirect("/login")
     user = User.query.get_or_404(user_id)
-    print(user.boathouses)
     form = EditUserForm()
     form.boathouses.choices = [(b.id, b.name) for b in Boathouse.query.all()]
     if user.confirmed is False:
@@ -147,7 +146,7 @@ def user_details(user_id):
         db.session.commit()
         return redirect(f'/userdetail/{user_id}')
     if user.boathouses:
-        boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
+        boathouses = UserFavorites.query.filter_by(user_id=user_id).all()
     else:
         boathouses = None
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
