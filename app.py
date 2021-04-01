@@ -147,8 +147,7 @@ def user_details(user_id):
         return redirect(f'/userdetail/{user_id}')
     if user.boathouses:
         boathouse_list = UserFavorites.query.filter_by(user_id=user_id).all()
-        print(boathouse_list)
-        boathouses = [Boathouse.query.get_or_404(boathouse) for boathouse in boathouse_list]
+        boathouses = [Boathouse.query.get_or_404(favorite.boathouse_id) for favorite in boathouse_list]
     else:
         boathouses = None
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
