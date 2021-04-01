@@ -125,6 +125,7 @@ ALTER SEQUENCE public."User_ID_seq" OWNED BY public."user".id;
 --
 
 CREATE TABLE public.user_favorites (
+	id integer NOT NULL,
     user_id integer,
     boathouse_id integer
 );
@@ -136,6 +137,18 @@ ALTER TABLE public.user_favorites OWNER TO postgres;
 -- TOC entry 2865 (class 2604 OID 41542)
 -- Name: boathouse id; Type: DEFAULT; Schema: public; Owner: postgres
 --
+CREATE SEQUENCE public."User_favorites_ID_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+	
+ALTER TABLE public."User_favorites_ID_seq" OWNER TO postgres;
+
+ALTER SEQUENCE public."User_favorites_ID_seq" OWNED BY public."user_favorites".id;
+
 
 ALTER TABLE ONLY public.boathouse ALTER COLUMN id SET DEFAULT nextval('public."Boathouse_ID_seq"'::regclass);
 
@@ -147,6 +160,7 @@ ALTER TABLE ONLY public.boathouse ALTER COLUMN id SET DEFAULT nextval('public."B
 
 ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public."User_ID_seq"'::regclass);
 
+ALTER TABLE ONLY public."user_favorites" ALTER COLUMN id SET DEFAULT nextval('public."User_favorites_ID_seq"'::regclass);
 
 --
 -- TOC entry 3011 (class 0 OID 41529)
