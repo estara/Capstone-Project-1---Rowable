@@ -144,10 +144,14 @@ def user_details(user_id):
         user.boathouses = add_to_list(user.boathouses, form.boathouses.data)
         db.session.add(user)
         db.session.commit()
+        print('updated boathouses ****************************')
         return redirect(f'/userdetail/{user_id}')
     if user.boathouses is not None:
+        print('get boathouses ****************************')
         boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
+        print('got boathouses ******************************')
     else:
+        print('no boathouses *********************')
         boathouses = None
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
