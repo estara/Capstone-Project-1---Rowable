@@ -42,7 +42,7 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
-    boathouses = db.relationship('Boathouse', secondary='user_favorites', backref='user', cascade="all, delete-orphan")
+    boathouses = db.relationship('Boathouse', secondary='user_favorites', backref='user')
 
     @classmethod
     def signup(cls, username, email, password):
