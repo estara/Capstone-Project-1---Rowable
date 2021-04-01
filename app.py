@@ -150,6 +150,9 @@ def user_details(user_id):
         return redirect(f'/userdetail/{user_id}')
     if user.boathouses:
         boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
+    else:
+        boathouses = None
+        user.boathouses = False
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
 
