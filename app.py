@@ -148,7 +148,8 @@ def user_details(user_id):
         db.session.commit()
         return redirect(f'/userdetail/{user_id}')
     boathouses = [b for b in Boathouse.query.filter(Boathouse.id.in_(user.boathouses))]
-    print(boathouses)
+    if not boathouses:
+        boathouses = None
     return render_template('userdetail.html', form=form, user=user, boathouses=boathouses)
 
 
