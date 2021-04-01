@@ -24,6 +24,7 @@ mail = Mail(app)
 
 
 def add_to_list(old_list, new_item):
+    """add favorite boathouse"""
     if old_list is None:
         return '{' + str(new_item) + '}'
     mytrans = {91: 123, 93: 125}
@@ -33,6 +34,7 @@ def add_to_list(old_list, new_item):
 
 
 def send_email(to, subject, template):
+    """send account confirmation email"""
     msg = Message(
         subject,
         recipients=[to],

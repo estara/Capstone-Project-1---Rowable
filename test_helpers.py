@@ -6,7 +6,7 @@ from helpers import Weather
 
 os.environ['DATABASE_URL'] = 'postgresql:///rowable-test'
 
-from app import app, CURR_USER_KEY
+from app import app
 
 
 db.create_all()
@@ -35,27 +35,27 @@ class HelpersTestCase(TestCase):
         db.session.commit()
         self.testboathouse2 = Boathouse.query.filter_by(name='testboathouse2').one()
         self.wind_direction = 135
-        self.wind_speed = 10
+        self.wind_speed = 9
         self.conditions = 'Tornado'
 
     def tearDown(self):
         """Teardown session"""
         db.session.rollback()
 
-    def test_get_weather(self):
-        assert False
-
     def test_wind_dir(self):
         """Does return correct wind speed/direction?"""
-        result = None, 10, 10, None
+        result = None, 9, 9, None
         maybe = Weather.wind_dir()
         self.assertEqual(result, maybe)
 
     def test_is_it_safe_conditions(self):
+        """Does return correct safe conditions?"""
         result = 'Tornados predicted'
         maybe = Weather.is_it_safe_conditions()
         self.assertEqual(result, maybe)
 
-
     def test_is_it_safe_wind(self):
-        assert False
+        """Does return correct safe wind?"""
+        result = True
+        maybe = Weather.is_it_safe_wind()
+        self.assertEqual(result, maybe)

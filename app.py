@@ -215,6 +215,7 @@ def boathouse_details(boathouse_id):
 
 @app.route('/confirm/<token>')
 def confirm_email(token):
+    """Confirm account email address"""
     try:
         email = confirm_token(token)
     except:
@@ -235,6 +236,7 @@ def confirm_email(token):
 
 @app.route('/unconfirmed')
 def unconfirmed():
+    """remind users to confirm account email"""
     if g.user:
         if g.user.confirmed:
             return redirect('/')
