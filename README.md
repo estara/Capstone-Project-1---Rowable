@@ -1,4 +1,4 @@
-# Capstone-Project-1---Rowable
+# Rowable
 
 https://rowable.herokuapp.com/
 
